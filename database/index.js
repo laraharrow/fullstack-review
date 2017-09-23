@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/fetcher');
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 
 db.on('error', function() {
   console.log('mongoose connection error');
@@ -19,8 +19,8 @@ let repoSchema = mongoose.Schema({
 
 let Repo = mongoose.model('Repo', repoSchema);
 
-let save = (callback) => {
-	
+let save = (name, repos, watches, callback) => {
+	findUser(name);
 	var newRepo = new Repo ({
 		name: name,
 		repos: owner.repos_url,
@@ -30,8 +30,15 @@ let save = (callback) => {
 	newRepo.save( (err, newRepo) => {
 		if (err) { console.log(err); }
 		callback(newRepo);
-	})
-		
+	})	
+}
+
+const findUser = (user, callback) => {
+	Repo.find({user: user}, (err, repo) => {
+		if (err) { console.log(err); }
+		console.log(repo);
+	});
+	
 }
 
 module.exports.save = save;

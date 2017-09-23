@@ -1,9 +1,20 @@
 const express = require('express');
-let app = express();
+const bodyParser = require('body-parser');
+const helper = require('../helpers/github.js');
+
+const app = express();
 
 app.use(express.static(__dirname + '/../client/dist'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.post('/repos', function (req, res) {
+  console.log('this is the post req body on the server: ', req.body);
+  
+  helper.getReposByUsername(req.body.term, (data) => {
+  	console.log('this is the github object: ', data);
+  });
+  
   // TODO - your code here!
   // This route should take the github username provided
   // and get the repo information from the github API, then
@@ -21,3 +32,6 @@ app.listen(port, function() {
   console.log(`listening on port ${port}`);
 });
 
+
+
+//this is the post req body on the server:  { '{"term":"asd"}': '' }
