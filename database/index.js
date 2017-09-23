@@ -12,19 +12,24 @@ db.once('open', function() {
 });
 
 let repoSchema = mongoose.Schema({
-  name: {type: String, unique: true},
+  name: String,
   repos: Array,
-  watchers: Number
 });
 
 let Repo = mongoose.model('Repo', repoSchema);
 
-let save = (name, repos, watches, callback) => {
+const findUser = (user, callback) => {
+	Repo.find({name: user}, (err, repo) => {
+		if (err) { console.log(err); }
+		callback(repo);
+	});
+}
+
+const save = (name, reposArr, callback) => {
 
 	var newRepo = new Repo ({
 		name: name,
-		repos: owner.repos_url,
-		watchers: watchers
+		repos: reposArr,
 	})
 
 	newRepo.save( (err, newRepo) => {
@@ -33,12 +38,5 @@ let save = (name, repos, watches, callback) => {
 	})	
 }
 
-// const findUser = (user, callback) => {
-// 	Repo.find({user: user}, (err, repo) => {
-// 		if (err) { console.log(err); }
-// 		console.log(repo);
-// 	});
-
-//}
 
 module.exports.save = save;

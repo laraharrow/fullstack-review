@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const helper = require('../helpers/github.js');
+const db = require('../database/index.js');
 
 const app = express();
 
@@ -9,10 +10,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.post('/repos', function (req, res) {
-  console.log('this is the post req body on the server: ', req.body);
-  
-  helper.getReposByUsername(req.body.term, (data) => {
-  	console.log('this is the github object: ', data);
+  //console.log('this is the post req body on the server: ', req.body);
+  console.log('username on server: ', req.body.term)
+  helper.getReposByUsername(req.body.term, (username, reposArr) => {
+  	db.save(username, reposArr, (data) => {
+    	console.log('data stored on db: ', data);
+  	});
   });
   
   // TODO - your code here!
@@ -32,6 +35,3 @@ app.listen(port, function() {
   console.log(`listening on port ${port}`);
 });
 
-
-
-//this is the post req body on the server:  { '{"term":"asd"}': '' }

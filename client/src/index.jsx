@@ -18,7 +18,7 @@ class App extends React.Component {
     $.ajax({
       type: 'POST',
       url: '/repos', 
-      data: JSON.stringify({term: term}),
+      data: {term: term},
       dataType: 'application/json', 
       success: function(data) { console.log('this is data in client post req', data); },
       error: function(error) { console.log('this is error in client post req', error); }
