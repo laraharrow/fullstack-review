@@ -12,15 +12,15 @@ db.once('open', function() {
 });
 
 let repoSchema = mongoose.Schema({
-  name: String,
-  repos: String,
+  name: {type: String, unique: true},
+  repos: Array,
   watchers: Number
 });
 
 let Repo = mongoose.model('Repo', repoSchema);
 
 let save = (name, repos, watches, callback) => {
-	findUser(name);
+
 	var newRepo = new Repo ({
 		name: name,
 		repos: owner.repos_url,
@@ -33,12 +33,12 @@ let save = (name, repos, watches, callback) => {
 	})	
 }
 
-const findUser = (user, callback) => {
-	Repo.find({user: user}, (err, repo) => {
-		if (err) { console.log(err); }
-		console.log(repo);
-	});
-	
-}
+// const findUser = (user, callback) => {
+// 	Repo.find({user: user}, (err, repo) => {
+// 		if (err) { console.log(err); }
+// 		console.log(repo);
+// 	});
+
+//}
 
 module.exports.save = save;
