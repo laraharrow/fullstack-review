@@ -19,7 +19,7 @@ class App extends React.Component {
       type: 'POST',
       url: '/repos', 
       data: {term: term},
-      dataType: 'application/json', 
+      //dataType: 'application/json', 
       success: function(data) { console.log('this is data in client post req', data); },
       error: function(error) { console.log('this is error in client post req', error); }
     });  

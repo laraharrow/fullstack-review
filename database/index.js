@@ -27,15 +27,24 @@ const findUser = (user, callback) => {
 
 const save = (name, reposArr, callback) => {
 
-	var newRepo = new Repo ({
-		name: name,
-		repos: reposArr,
+	Repo.find({name: name}, (err, user) => {
+		
+		if (user.length) {
+			Repo.update({name: name}, newRepo);
+		} else {
+
+			var newRepo = new Repo ({
+				name: name,
+				repos: reposArr,
+			});
+
+			newRepo.save( (err, newRepo) => {
+				if (err) { console.log(err); }
+				callback(newRepo);
+			})	
+		}
 	})
 
-	newRepo.save( (err, newRepo) => {
-		if (err) { console.log(err); }
-		callback(newRepo);
-	})	
 }
 
 
