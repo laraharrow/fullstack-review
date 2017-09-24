@@ -12,30 +12,44 @@ db.once('open', function() {
 });
 
 let repoSchema = mongoose.Schema({
-  name: String,
-  repos: Array,
+  username: String,
+  repoName: String,
+  repoUrl: String,
+  watchers: Number
 });
 
 let Repo = mongoose.model('Repo', repoSchema);
 
-const findUser = (user, callback) => {
-	Repo.find({name: user}, (err, repo) => {
-		if (err) { console.log(err); }
-		callback(repo);
-	});
+const findRepos = (callback) => {
+	Repo.find((err, repoData) => {
+		if(err) { console.error(err)}
+		callback(repoData);	
+	})
 }
 
-const save = (name, reposArr, callback) => {
+// const findRepos = (callback) => {
+// 	Repo.find({}).
+// 	sort('-watchers').
+// 	limit(25).
+// 	exec(err, repoData) => {
+// 		if(err) { console.error(err)}	
+// 		callback(repoData);	
+// 	})
+// }
 
-	Repo.find({name: name}, (err, user) => {
+const save = (username, repoName, repoUrl, watchers, callback) => {
+
+	Repo.find({name: username}, (err, user) => {
 		
 		if (user.length) {
 			Repo.update({name: name}, newRepo);
 		} else {
 
 			var newRepo = new Repo ({
-				name: name,
-				repos: reposArr,
+				username: username,
+			  repoName: repoName,
+			  repoUrl: repoUrl,
+			  watchers: watchers
 			});
 
 			newRepo.save( (err, newRepo) => {
@@ -47,5 +61,5 @@ const save = (name, reposArr, callback) => {
 
 }
 
-
+module.exports.findRepos = findRepos;
 module.exports.save = save;

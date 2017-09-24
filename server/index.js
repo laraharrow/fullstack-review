@@ -12,9 +12,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.post('/repos', function (req, res) {
   //console.log('this is the post req body on the server: ', req.body);
   console.log('username on server: ', req.body.term)
-  helper.getReposByUsername(req.body.term, (username, reposArr) => {
-  	db.save(username, reposArr, (data) => {
+  helper.getReposByUsername(req.body.term, (username, reponame, repoUrl, watchers) => {
+  	db.save(username, reponame, repoUrl, watchers, (data) => {
     	console.log('data stored on db: ', data);
+    	res.send(data);
   	});
   });
   
@@ -25,8 +26,10 @@ app.post('/repos', function (req, res) {
 });
 
 app.get('/repos', function (req, res) {
-  // TODO - your code here!
-  // This route should send back the top 25 repos
+	db.findRepos((data) => {
+		console.log(data)
+		res.send(data);
+	});
 });
 
 let port = 1128;
