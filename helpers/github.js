@@ -16,9 +16,11 @@ let getReposByUsername = (username, callback) => {
     if (!err && res.statusCode === 200) {
       var GHData = JSON.parse(data);
       var username = GHData[0].owner.login;
+      var reposArr = [];
       GHData.forEach((repo) => {
-        callback(username, repo.name, repo.html_url, repo.watchers);
+        reposArr.push({username: username, repoName: repo.name, repoUrl: repo.html_url, watchers: repo.watchers});
       });
+      callback(reposArr);
     }
   })
 }

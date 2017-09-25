@@ -1,18 +1,28 @@
 import React from 'react';
 
-const RepoList = (props) => (
-  <div>
-    <h4> Repo List Component </h4>
-    There are {props.repos.length} repos.
-    <br/>
-    <br/>
-	  {this.props.repos.map((data) => (
-   		<h3 key={item._id}>{this.props.data.username}</h3>	
-   	))}
-  </div>
-)
+class RepoList extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+	render() {
+		return (
+		  <div>
+		    <h4> Repo List Component </h4>
+		    There are {this.props.repos.length} repos.
+		    <br/>
+		    <br/>
+		    <div>
+					{this.props.repos.map((data, i) => {
+						if (i <= 25) {
+							return (
+								<h3 key={data._id}> {data.watchers} - {data.username} || <a href={`${data.repoUrl}`}>{data.repoName}</a></h3> 
+							)
+						}	
+					})}
+				</div>			    
+		  </div>
+	  )
+	}
+}
 
 export default RepoList;
-
-
-//| {this.props.data.repoName} | {this.props.data.repoUrl}

@@ -21,42 +21,33 @@ let repoSchema = mongoose.Schema({
 let Repo = mongoose.model('Repo', repoSchema);
 
 const findRepos = (callback) => {
-	Repo.find((err, repoData) => {
-		if(err) { console.error(err)}
+	Repo.find({}).
+	sort('-watchers').
+	//limit(25).
+	exec((err, repoData) => {
+		if(err) { console.error(err)}	
 		callback(repoData);	
 	})
 }
 
-// const findRepos = (callback) => {
-// 	Repo.find({}).
-// 	sort('-watchers').
-// 	limit(25).
-// 	exec(err, repoData) => {
-// 		if(err) { console.error(err)}	
-// 		callback(repoData);	
-// 	})
-// }
 
-const save = (username, repoName, repoUrl, watchers, callback) => {
 
-	Repo.find({name: username}, (err, user) => {
-		
-		if (user.length) {
-			Repo.update({name: name}, newRepo);
-		} else {
+const save = (reposArr, callback) => {
 
+	Repo.remove({name: reposArr[0].username}, async (err) => {
+	
+		for (var repo of reposArr) {	
+	
 			var newRepo = new Repo ({
-				username: username,
-			  repoName: repoName,
-			  repoUrl: repoUrl,
-			  watchers: watchers
+				username: repo.username,
+			  repoName: repo.repoName,
+			  repoUrl: repo.repoUrl,
+			  watchers: repo.watchers
 			});
 
-			newRepo.save( (err, newRepo) => {
-				if (err) { console.log(err); }
-				callback(newRepo);
-			})	
+			await newRepo.save();	
 		}
+		callback('repos saved')	
 	})
 
 }

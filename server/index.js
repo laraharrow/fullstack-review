@@ -12,11 +12,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.post('/repos', function (req, res) {
   //console.log('this is the post req body on the server: ', req.body);
   console.log('username on server: ', req.body.term)
-  helper.getReposByUsername(req.body.term, (username, reponame, repoUrl, watchers) => {
-  	db.save(username, reponame, repoUrl, watchers, (data) => {
-    	console.log('data stored on db: ', data);
-    	res.send(data);
-  	});
+  helper.getReposByUsername(req.body.term, (reposArr) => {
+    	db.save(reposArr, (data) => {
+      	//console.log('data stored on db: ', data);
+  	    res.send('it worked!');
+      });
   });
   
   // TODO - your code here!
@@ -27,7 +27,7 @@ app.post('/repos', function (req, res) {
 
 app.get('/repos', function (req, res) {
 	db.findRepos((data) => {
-		console.log(data)
+		console.log('server get request: ', data)
 		res.send(data);
 	});
 });

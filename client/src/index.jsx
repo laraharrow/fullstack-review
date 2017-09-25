@@ -11,37 +11,42 @@ class App extends React.Component {
       repos: []
     }
     this.search = this.search.bind(this);
+    this.loadRepos = this.loadRepos.bind(this);
   }
 
-  componentDidMount() {
+  loadRepos() {
     $.ajax({
       type: 'GET',
       url: '/repos',
       success: (data) => {
         console.log('get req response: ', data);
-        // var reposUrl = [];
-        // data.forEach((repo) => {
-        //   reposUrl.push([repo.username, repo.repoName, repo.repoUrl])
-        // })
         this.setState({
           repos: data
         });  
-
       },
       error: (err) => {
         console.error(err);
       }
     })
+  }  
+
+  componentDidMount() {
+    this.loadRepos();
   }
 
-  search (term) {
+  search(term) {
     console.log(`${term} was searched`);
     $.ajax({
       type: 'POST',
       url: '/repos', 
       data: {term: term},
-      success: function(data) { console.log('this is data in client post req', data); },
-      error: function(error) { console.log('this is error in client post req', error); }
+      success: (data) => { 
+        console.log('this is data in client post req', data);
+        this.loadRepos();  
+      },
+      error: function(error) { 
+        console.log('this is error in client post req', error); 
+      }
     });  
   }
 
